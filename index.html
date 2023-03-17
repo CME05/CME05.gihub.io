@@ -1,23 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Business AIdeas</title>
-	<script src="https://cdn.jsdelivr.net/npm/@openai/chat-client@0.5.0/dist/chat-client.min.js"></script>
+	<title>ChatGPT Ideas</title>
+	<style>
+		body {
+			background-color: #f2f2f2;
+		}
+		
+		#header {
+			background-color: #ffffff;
+			height: 70px;
+			padding: 20px;
+			border-bottom: 1px solid #e4e4e4;
+		}
+		
+		#logo {
+			float: left;
+			width: 120px;
+			height: 40px;
+			background-image: url('https://i.imgur.com/7rJtf5D.png');
+			background-size: contain;
+			background-repeat: no-repeat;
+			margin-right: 10px;
+		}
+		
+		#search-box {
+			float: left;
+			margin-top: 18px;
+			padding-left: 10px;
+			width: 550px;
+			height: 32px;
+			border: 1px solid #d4d4d4;
+			border-radius: 20px;
+			background-color: #f6f6f6;
+		}
+		
+		#search-button {
+			float: left;
+			margin-top: 18px;
+			margin-left: -30px;
+			width: 30px;
+			height: 32px;
+			background-image: url('https://i.imgur.com/tU6wbrG.png');
+			background-size: contain;
+			background-repeat: no-repeat;
+			cursor: pointer;
+		}
+		
+		#result {
+			margin-top: 20px;
+			padding: 20px;
+			background-color: #ffffff;
+			border: 1px solid #e4e4e4;
+			border-radius: 10px;
+			box-shadow: 0px 0px 10px #d4d4d4;
+			display: none;
+		}
+	</style>
 </head>
 <body>
-	<h1>Business AIdeas</h1>
-	<p>Ask ChatGPT for business ideas:</p>
-	<div id="chat-container"></div>
+	<div id="header">
+		<div id="logo"></div>
+		<div id="search-box">
+			<input type="text" placeholder="Ask anyhing to generate new business idea..." />
+		</div>
+		<div id="generate-button"></div>
+	</div>
+	<div id="result"></div>
 	<script>
-		const chatClient = new OpenAIChat({
-			apiKey: '<YOUR_API_KEY_HERE>',
-			model: 'text-davinci-002',
-			prompt: 'Generate a business idea',
-			chatTitle: 'ChatGPT',
-			placeholderText: 'Type your message here',
-			chatIconUrl: 'https://avatars.githubusercontent.com/u/11940517?s=200&v=4'
+		var searchBox = document.querySelector('#search-box input');
+		var resultBox = document.querySelector('#result');
+		var searchButton = document.querySelector('#search-button');
+		
+		searchButton.addEventListener('click', function() {
+			var userInput = searchBox.value;
+			if (userInput) {
+				fetch('https://api.openai.com/v1/engine/davinci-codex/completions', {
+				  method: 'POST',
+				  headers: {
+				    'Content-Type': 'application/json',
+				    'Authorization': 'Bearer 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'
+				  },
+				  body: JSON.stringify({
+				    'prompt': 'I need some ideas for ' + userInput,
+				    'max_tokens': 60,
+				    'n': 1,
+				    'stop': ['\n']
+				  })
+				})
+				.then(response => response.json())
+				.then(data => {
+					resultBox.innerHTML = data.choices[0].text;
+					resultBox.style.display = 'block';
+				})
+				.catch(error => console.log(error));
+			}
 		});
-		chatClient.createChatbox(document.getElementById('chat-container'));
 	</script>
 </body>
 </html>

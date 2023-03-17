@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Business AIdeas</title>
+	<script src="https://cdn.jsdelivr.net/npm/@openai/chat-client@0.5.0/dist/chat-client.min.js"></script>
+</head>
+<body>
+	<h1>Business AIdeas</h1>
+	<p>Ask ChatGPT for business ideas:</p>
+	<div id="chat-container"></div>
+	<script>
+		const chatClient = new OpenAIChat({
+			apiKey: '<YOUR_API_KEY_HERE>',
+			model: 'text-davinci-002',
+			prompt: 'Generate a business idea',
+			chatTitle: 'ChatGPT',
+			placeholderText: 'Type your message here',
+			chatIconUrl: 'https://avatars.githubusercontent.com/u/11940517?s=200&v=4'
+		});
+		chatClient.createChatbox(document.getElementById('chat-container'));
+	</script>
+</body>
+</html>
